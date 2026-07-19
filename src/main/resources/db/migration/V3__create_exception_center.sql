@@ -1,0 +1,23 @@
+CREATE TABLE exception_cases (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    case_no VARCHAR(32) NOT NULL,
+    type VARCHAR(32) NOT NULL,
+    severity VARCHAR(16) NOT NULL,
+    status VARCHAR(16) NOT NULL,
+    title VARCHAR(120) NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    source_type VARCHAR(32) NOT NULL,
+    source_id VARCHAR(64) NOT NULL,
+    source_reference VARCHAR(80) NOT NULL,
+    assignee VARCHAR(64),
+    resolution VARCHAR(500),
+    detected_at DATETIME(6) NOT NULL,
+    claimed_at DATETIME(6),
+    resolved_at DATETIME(6),
+    version BIGINT,
+    PRIMARY KEY (id),
+    CONSTRAINT uk_exception_case_no UNIQUE (case_no),
+    INDEX idx_exception_status_detected (status, detected_at),
+    INDEX idx_exception_source (source_type, source_id),
+    INDEX idx_exception_assignee (assignee)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

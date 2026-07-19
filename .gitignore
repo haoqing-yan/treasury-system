@@ -1,0 +1,13 @@
+target/
+data/
+frontend/node_modules/
+frontend/dist/
+.pnpm-store/
+frontend/*.tsbuildinfo
+.idea/
+*.iml
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example

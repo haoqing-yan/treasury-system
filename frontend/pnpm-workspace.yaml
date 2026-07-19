@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - esbuild
+  - vue-demi
+confirmModulesPurge: false
+allowBuilds:
+  esbuild: true
+  vue-demi: true

@@ -1,0 +1,102 @@
+CREATE TABLE bank_accounts (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    organization_name VARCHAR(64) NOT NULL,
+    bank_name VARCHAR(80) NOT NULL,
+    bank_code VARCHAR(40) NOT NULL,
+    account_name VARCHAR(100) NOT NULL,
+    account_no VARCHAR(64) NOT NULL,
+    currency VARCHAR(3) NOT NULL,
+    balance DECIMAL(20, 2) NOT NULL,
+    available_balance DECIMAL(20, 2) NOT NULL,
+    low_balance_threshold DECIMAL(20, 2) NOT NULL,
+    account_type VARCHAR(20) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    last_sync_time DATETIME(6) NOT NULL,
+    version BIGINT,
+    PRIMARY KEY (id),
+    CONSTRAINT uk_bank_account_no UNIQUE (account_no)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE payment_orders (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    payment_no VARCHAR(32) NOT NULL,
+    payer_account_id BIGINT NOT NULL,
+    payee_name VARCHAR(120) NOT NULL,
+    payee_bank_name VARCHAR(80) NOT NULL,
+    payee_account_no VARCHAR(64) NOT NULL,
+    amount DECIMAL(20, 2) NOT NULL,
+    currency VARCHAR(3) NOT NULL,
+    purpose VARCHAR(240) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    applicant VARCHAR(64) NOT NULL,
+    approver VARCHAR(64),
+    reject_reason VARCHAR(240),
+    risk_flag BIT(1) NOT NULL,
+    risk_message VARCHAR(240),
+    created_at DATETIME(6) NOT NULL,
+    submitted_at DATETIME(6),
+    approved_at DATETIME(6),
+    paid_at DATETIME(6),
+    version BIGINT,
+    PRIMARY KEY (id),
+    CONSTRAINT uk_payment_no UNIQUE (payment_no),
+    CONSTRAINT fk_payment_payer_account FOREIGN KEY (payer_account_id) REFERENCES bank_accounts (id),
+    INDEX idx_payment_status_created (status, created_at),
+    INDEX idx_payment_payer_account (payer_account_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE cash_plans (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    plan_date DATE NOT NULL,
+    type VARCHAR(16) NOT NULL,
+    category VARCHAR(64) NOT NULL,
+    amount DECIMAL(20, 2) NOT NULL,
+    organization_name VARCHAR(64) NOT NULL,
+    description VARCHAR(240),
+    created_by VARCHAR(64) NOT NULL,
+    created_at DATETIME(6) NOT NULL,
+    PRIMARY KEY (id),
+    INDEX idx_cash_plan_date_type (plan_date, type)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE bank_transactions (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    transaction_no VARCHAR(64) NOT NULL,
+    bank_account_id BIGINT NOT NULL,
+    transaction_time DATETIME(6) NOT NULL,
+    direction VARCHAR(16) NOT NULL,
+    counterparty_name VARCHAR(120) NOT NULL,
+    counterparty_account_no VARCHAR(64),
+    amount DECIMAL(20, 2) NOT NULL,
+    currency VARCHAR(3) NOT NULL,
+    balance_after DECIMAL(20, 2) NOT NULL,
+    purpose VARCHAR(240) NOT NULL,
+    reconciliation_status VARCHAR(16) NOT NULL,
+    matched_payment_id BIGINT,
+    match_method VARCHAR(32),
+    match_message VARCHAR(240),
+    matched_at DATETIME(6),
+    created_at DATETIME(6) NOT NULL,
+    version BIGINT,
+    PRIMARY KEY (id),
+    CONSTRAINT uk_bank_transaction_no UNIQUE (transaction_no),
+    CONSTRAINT fk_transaction_bank_account FOREIGN KEY (bank_account_id) REFERENCES bank_accounts (id),
+    CONSTRAINT fk_transaction_payment FOREIGN KEY (matched_payment_id) REFERENCES payment_orders (id),
+    INDEX idx_transaction_status_time (reconciliation_status, transaction_time),
+    INDEX idx_transaction_bank_account (bank_account_id),
+    INDEX idx_transaction_payment (matched_payment_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE audit_logs (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    username VARCHAR(64) NOT NULL,
+    action VARCHAR(64) NOT NULL,
+    resource_type VARCHAR(64) NOT NULL,
+    resource_id VARCHAR(64),
+    detail VARCHAR(500) NOT NULL,
+    ip_address VARCHAR(64) NOT NULL,
+    operated_at DATETIME(6) NOT NULL,
+    PRIMARY KEY (id),
+    INDEX idx_audit_operated_at (operated_at),
+    INDEX idx_audit_resource (resource_type, resource_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="企业司库资金运营与风险控制平台">
+    <title>司库云控平台</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <div class="brand-mark">T</div>
+            <div>
+                <strong>司库云控</strong>
+                <span>TREASURY CONTROL</span>
+            </div>
+        </div>
+
+        <div class="tenant-card">
+            <span class="tenant-label">当前管理组织</span>
+            <strong>华辰控股集团</strong>
+            <span class="tenant-meta"><i></i> 集团资金中心</span>
+        </div>
+
+        <nav class="main-nav" aria-label="主导航">
+            <button class="nav-item active" data-page="dashboard">
+                <span class="nav-icon">⌂</span><span>资金驾驶舱</span>
+            </button>
+            <button class="nav-item" data-page="accounts">
+                <span class="nav-icon">▣</span><span>银行账户</span>
+            </button>
+            <button class="nav-item" data-page="payments">
+                <span class="nav-icon">↗</span><span>付款管理</span>
+                <span class="nav-badge" id="pendingNavBadge">0</span>
+            </button>
+            <button class="nav-item" data-page="plans">
+                <span class="nav-icon">▤</span><span>资金计划</span>
+            </button>
+            <button class="nav-item admin-only" data-page="audits">
+                <span class="nav-icon">◎</span><span>审计日志</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="security-note">
+                <span class="security-icon">✓</span>
+                <div><strong>安全连接</strong><span>本次会话受保护</span></div>
+            </div>
+            <span class="version">V0.1 · 首版演示环境</span>
+        </div>
+    </aside>
+
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <main class="main-area">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="icon-button menu-button" id="menuButton" aria-label="展开菜单">☰</button>
+                <div>
+                    <p class="eyebrow" id="pageEyebrow">资金运营总览</p>
+                    <h1 id="pageTitle">资金驾驶舱</h1>
+                </div>
+            </div>
+            <div class="topbar-actions">
+                <div class="date-chip" id="todayLabel"></div>
+                <button class="icon-button notification-button" aria-label="风险提醒" data-page-link="dashboard">
+                    <span>!</span><i id="alertDot"></i>
+                </button>
+                <div class="user-menu">
+                    <button class="user-button" id="userButton" aria-expanded="false">
+                        <span class="avatar" id="userAvatar">管</span>
+                        <span class="user-copy"><strong id="userDisplayName">加载中</strong><small id="userRoleName">—</small></span>
+                        <span class="chevron">⌄</span>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-profile">
+                            <strong id="dropdownUsername">—</strong>
+                            <span>华辰控股集团</span>
+                        </div>
+                        <button id="logoutButton">退出登录</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-wrap">
+            <section class="page active" id="page-dashboard">
+                <div class="welcome-row">
+                    <div>
+                        <p class="section-kicker">GOOD MORNING</p>
+                        <h2>集团资金，尽在掌握</h2>
+                        <p>数据更新至 <span id="dashboardUpdatedAt">—</span>，以下金额默认折算口径为人民币。</p>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="button secondary" data-page-link="accounts">查看账户</button>
+                        <button class="button primary operator-only" data-action="open-payment">＋ 新建付款</button>
+                    </div>
+                </div>
+
+                <div class="metric-grid" id="metricGrid">
+                    <article class="metric-card featured skeleton-card"></article>
+                    <article class="metric-card skeleton-card"></article>
+                    <article class="metric-card skeleton-card"></article>
+                    <article class="metric-card skeleton-card"></article>
+                </div>
+
+                <div class="dashboard-grid">
+                    <article class="panel cashflow-panel">
+                        <div class="panel-heading">
+                            <div><span class="panel-kicker">7 DAY FORECAST</span><h3>未来七日资金流</h3></div>
+                            <div class="legend"><span><i class="inflow-dot"></i>流入</span><span><i class="outflow-dot"></i>流出</span></div>
+                        </div>
+                        <div class="cashflow-chart" id="cashflowChart"></div>
+                    </article>
+
+                    <article class="panel bank-panel">
+                        <div class="panel-heading">
+                            <div><span class="panel-kicker">BANK POSITION</span><h3>银行资金分布</h3></div>
+                            <button class="text-button" data-page-link="accounts">详情 →</button>
+                        </div>
+                        <div class="bank-distribution" id="bankDistribution"></div>
+                    </article>
+                </div>
+
+                <div class="dashboard-grid lower-grid">
+                    <article class="panel payment-panel">
+                        <div class="panel-heading">
+                            <div><span class="panel-kicker">RECENT PAYMENTS</span><h3>近期付款动态</h3></div>
+                            <button class="text-button" data-page-link="payments">全部付款 →</button>
+                        </div>
+                        <div class="table-wrap compact-table">
+                            <table>
+                                <thead><tr><th>付款单</th><th>收款方</th><th>金额</th><th>状态</th></tr></thead>
+                                <tbody id="recentPaymentsBody"></tbody>
+                            </table>
+                        </div>
+                    </article>
+
+                    <article class="panel risk-panel">
+                        <div class="panel-heading">
+                            <div><span class="panel-kicker">RISK CENTER</span><h3>风险与待办</h3></div>
+                            <span class="count-badge" id="riskCount">0</span>
+                        </div>
+                        <div class="risk-list" id="riskList"></div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="page" id="page-accounts">
+                <div class="page-intro">
+                    <div><p class="section-kicker">BANK ACCOUNT LIFECYCLE</p><h2>银行账户</h2><p>统一维护集团账户台账、余额与账户运行状态。</p></div>
+                    <button class="button primary admin-only" data-action="open-account">＋ 新增账户</button>
+                </div>
+                <div class="summary-strip" id="accountSummary"></div>
+                <article class="panel list-panel">
+                    <div class="toolbar">
+                        <label class="search-box"><span>⌕</span><input id="accountSearch" placeholder="搜索组织、银行或账户名称"></label>
+                        <select id="accountStatusFilter" aria-label="账户状态筛选">
+                            <option value="">全部状态</option><option value="ACTIVE">正常</option><option value="RESTRICTED">受限</option><option value="FROZEN">冻结</option><option value="CLOSED">已销户</option>
+                        </select>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead><tr><th>账户名称</th><th>开户银行</th><th>账号</th><th>可用余额</th><th>用途</th><th>状态</th><th>最近同步</th></tr></thead>
+                            <tbody id="accountsBody"></tbody>
+                        </table>
+                    </div>
+                </article>
+            </section>
+
+            <section class="page" id="page-payments">
+                <div class="page-intro">
+                    <div><p class="section-kicker">PAYMENT CONTROL</p><h2>付款管理</h2><p>付款申请、岗位复核与银行执行的全流程控制。</p></div>
+                    <button class="button primary operator-only" data-action="open-payment">＋ 新建付款</button>
+                </div>
+                <div class="payment-tabs" id="paymentTabs">
+                    <button class="active" data-status="">全部 <span id="countAll">0</span></button>
+                    <button data-status="DRAFT">草稿 <span id="countDraft">0</span></button>
+                    <button data-status="PENDING">待审批 <span id="countPending">0</span></button>
+                    <button data-status="APPROVED">待支付 <span id="countApproved">0</span></button>
+                    <button data-status="PAID">已支付 <span id="countPaid">0</span></button>
+                    <button data-status="REJECTED">已驳回 <span id="countRejected">0</span></button>
+                </div>
+                <article class="panel list-panel">
+                    <div class="toolbar">
+                        <label class="search-box wide"><span>⌕</span><input id="paymentSearch" placeholder="搜索付款单号、收款方或用途"></label>
+                        <span class="toolbar-note">关键操作均写入审计日志</span>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead><tr><th>付款单 / 用途</th><th>付款账户</th><th>收款方</th><th>金额</th><th>申请人</th><th>状态</th><th class="action-col">操作</th></tr></thead>
+                            <tbody id="paymentsBody"></tbody>
+                        </table>
+                    </div>
+                </article>
+            </section>
+
+            <section class="page" id="page-plans">
+                <div class="page-intro">
+                    <div><p class="section-kicker">CASH FORECAST</p><h2>资金计划</h2><p>维护未来资金流入流出，提前识别缺口与闲置。</p></div>
+                    <button class="button primary operator-only" data-action="open-plan">＋ 新增计划</button>
+                </div>
+                <div class="plan-overview" id="planOverview"></div>
+                <article class="panel list-panel">
+                    <div class="toolbar">
+                        <div class="date-range">
+                            <label>从 <input type="date" id="planFrom"></label><label>至 <input type="date" id="planTo"></label>
+                            <button class="button small secondary" id="planQuery">查询</button>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead><tr><th>计划日期</th><th>收支方向</th><th>类别</th><th>组织</th><th>金额</th><th>说明</th><th>创建人</th></tr></thead>
+                            <tbody id="plansBody"></tbody>
+                        </table>
+                    </div>
+                </article>
+            </section>
+
+            <section class="page" id="page-audits">
+                <div class="page-intro">
+                    <div><p class="section-kicker">AUDIT TRAIL</p><h2>审计日志</h2><p>关键资金操作全量留痕，支持责任追溯。</p></div>
+                    <button class="button secondary" id="refreshAudits">↻ 刷新日志</button>
+                </div>
+                <article class="panel list-panel">
+                    <div class="audit-banner"><span>✓</span><div><strong>审计链路正常</strong><p>系统记录操作人、业务对象、动作、时间与来源地址。</p></div></div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead><tr><th>时间</th><th>操作人</th><th>动作</th><th>业务对象</th><th>操作详情</th><th>来源</th></tr></thead>
+                            <tbody id="auditsBody"></tbody>
+                        </table>
+                    </div>
+                </article>
+            </section>
+        </div>
+    </main>
+</div>
+
+<dialog class="modal" id="paymentModal">
+    <form method="dialog" id="paymentForm">
+        <div class="modal-header"><div><span class="panel-kicker">NEW PAYMENT</span><h2>新建付款申请</h2></div><button class="modal-close" value="cancel" aria-label="关闭">×</button></div>
+        <div class="modal-body">
+            <div class="form-section-title"><span>01</span><div><strong>付款信息</strong><small>选择集团内正常运行的付款账户</small></div></div>
+            <div class="form-grid">
+                <label class="field full"><span>付款账户 *</span><select name="payerAccountId" id="payerAccountSelect" required></select></label>
+                <label class="field"><span>收款方名称 *</span><input name="payeeName" maxlength="120" required placeholder="请输入企业或个人名称"></label>
+                <label class="field"><span>收款银行 *</span><input name="payeeBankName" maxlength="80" required placeholder="例如：中国建设银行"></label>
+                <label class="field"><span>收款账号 *</span><input name="payeeAccountNo" inputmode="numeric" pattern="[0-9]{8,32}" required placeholder="8 至 32 位银行账号"></label>
+                <label class="field"><span>付款金额 *</span><div class="money-input"><span>¥</span><input name="amount" type="number" min="0.01" step="0.01" required placeholder="0.00"></div></label>
+                <label class="field full"><span>付款用途 *</span><textarea name="purpose" maxlength="240" required placeholder="请填写合同、项目或费用说明"></textarea></label>
+            </div>
+            <div class="control-tip"><span>i</span><p>系统将在保存时检查付款账户状态、币种和 24 小时内的重复付款风险。</p></div>
+        </div>
+        <div class="modal-footer"><button class="button secondary" value="cancel">取消</button><button class="button primary" type="submit" value="default">保存为草稿</button></div>
+    </form>
+</dialog>
+
+<dialog class="modal" id="accountModal">
+    <form method="dialog" id="accountForm">
+        <div class="modal-header"><div><span class="panel-kicker">NEW BANK ACCOUNT</span><h2>新增银行账户</h2></div><button class="modal-close" value="cancel" aria-label="关闭">×</button></div>
+        <div class="modal-body">
+            <div class="form-grid">
+                <label class="field"><span>所属组织 *</span><input name="organizationName" required value="华辰控股集团"></label>
+                <label class="field"><span>账户名称 *</span><input name="accountName" required placeholder="例如：集团一般结算户"></label>
+                <label class="field"><span>开户银行 *</span><input name="bankName" required placeholder="银行全称"></label>
+                <label class="field"><span>银行代码 *</span><input name="bankCode" required placeholder="例如：ICBC"></label>
+                <label class="field full"><span>银行账号 *</span><input name="accountNo" inputmode="numeric" pattern="[0-9]{8,32}" required placeholder="8 至 32 位银行账号"></label>
+                <label class="field"><span>币种 *</span><select name="currency"><option value="CNY">CNY 人民币</option><option value="USD">USD 美元</option><option value="EUR">EUR 欧元</option></select></label>
+                <label class="field"><span>账户用途 *</span><select name="accountType"><option value="GENERAL">一般账户</option><option value="BASIC">基本账户</option><option value="SPECIAL">专用账户</option><option value="SETTLEMENT">结算账户</option><option value="CASH_POOL">资金池账户</option></select></label>
+                <label class="field"><span>账面余额 *</span><input name="balance" type="number" min="0" step="0.01" value="0" required></label>
+                <label class="field"><span>可用余额 *</span><input name="availableBalance" type="number" min="0" step="0.01" value="0" required></label>
+                <label class="field"><span>余额预警线 *</span><input name="lowBalanceThreshold" type="number" min="0" step="0.01" value="100000" required></label>
+                <label class="field"><span>账户状态 *</span><select name="status"><option value="ACTIVE">正常</option><option value="RESTRICTED">受限</option><option value="FROZEN">冻结</option></select></label>
+            </div>
+        </div>
+        <div class="modal-footer"><button class="button secondary" value="cancel">取消</button><button class="button primary" type="submit" value="default">保存账户</button></div>
+    </form>
+</dialog>
+
+<dialog class="modal small-modal" id="planModal">
+    <form method="dialog" id="planForm">
+        <div class="modal-header"><div><span class="panel-kicker">NEW CASH PLAN</span><h2>新增资金计划</h2></div><button class="modal-close" value="cancel" aria-label="关闭">×</button></div>
+        <div class="modal-body">
+            <div class="form-grid">
+                <label class="field"><span>计划日期 *</span><input name="planDate" id="newPlanDate" type="date" required></label>
+                <label class="field"><span>收支方向 *</span><select name="type"><option value="INFLOW">资金流入</option><option value="OUTFLOW">资金流出</option></select></label>
+                <label class="field"><span>计划类别 *</span><input name="category" required placeholder="例如：销售回款"></label>
+                <label class="field"><span>计划金额 *</span><input name="amount" type="number" min="0.01" step="0.01" required></label>
+                <label class="field full"><span>所属组织 *</span><input name="organizationName" required value="华辰控股集团"></label>
+                <label class="field full"><span>计划说明</span><textarea name="description" maxlength="240" placeholder="补充合同、客户或付款批次信息"></textarea></label>
+            </div>
+        </div>
+        <div class="modal-footer"><button class="button secondary" value="cancel">取消</button><button class="button primary" type="submit" value="default">保存计划</button></div>
+    </form>
+</dialog>
+
+<dialog class="confirm-modal" id="confirmModal">
+    <form method="dialog">
+        <div class="confirm-icon" id="confirmIcon">✓</div>
+        <h3 id="confirmTitle">确认操作</h3>
+        <p id="confirmMessage">确认继续执行吗？</p>
+        <label class="field hidden" id="confirmReasonField"><span>驳回原因 *</span><textarea id="confirmReason" maxlength="240"></textarea></label>
+        <div class="confirm-actions"><button class="button secondary" value="cancel">取消</button><button class="button primary" id="confirmButton" value="default">确认</button></div>
+    </form>
+</dialog>
+
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+<script src="/js/app.js" defer></script>
+</body>
+</html>

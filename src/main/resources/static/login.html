@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="登录司库云控平台">
+    <title>登录 · 司库云控平台</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body class="login-page">
+<main class="login-shell">
+    <section class="login-story">
+        <div class="story-top">
+            <div class="brand login-brand"><div class="brand-mark">T</div><div><strong>司库云控</strong><span>TREASURY CONTROL</span></div></div>
+            <span class="environment-badge"><i></i> 安全演示环境</span>
+        </div>
+        <div class="story-copy">
+            <span class="story-index">01 / 资金安全</span>
+            <h1>每一笔资金，<br>都清晰、可控、可追溯。</h1>
+            <p>统一账户、付款、计划与风险视图，让集团资金管理从“事后统计”走向“实时运营”。</p>
+        </div>
+        <div class="story-stats">
+            <div><strong>100%</strong><span>关键操作留痕</span></div>
+            <div><strong>7×24</strong><span>资金动态监控</span></div>
+            <div><strong>3 层</strong><span>岗位制衡控制</span></div>
+        </div>
+        <div class="story-pattern" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    </section>
+
+    <section class="login-panel">
+        <div class="login-form-wrap">
+            <div class="login-heading"><span>WELCOME BACK</span><h2>登录司库工作台</h2><p>请选择演示岗位，或输入对应账号。</p></div>
+
+            <div class="demo-roles" aria-label="演示岗位快捷选择">
+                <button type="button" data-user="operator" data-password="operator123"><span>经</span><div><strong>资金经办</strong><small>申请与计划</small></div></button>
+                <button type="button" data-user="approver" data-password="approver123"><span>审</span><div><strong>资金审批</strong><small>复核与驳回</small></div></button>
+                <button type="button" class="selected" data-user="admin" data-password="admin123"><span>管</span><div><strong>系统管理员</strong><small>全部权限</small></div></button>
+            </div>
+
+            <form action="/login" method="post" id="loginForm">
+                <label class="login-field"><span>账号</span><div><i>人</i><input name="username" id="username" autocomplete="username" value="admin" required></div></label>
+                <label class="login-field"><span>密码</span><div><i>钥</i><input type="password" name="password" id="password" autocomplete="current-password" value="admin123" required><button type="button" id="togglePassword" aria-label="显示密码">显示</button></div></label>
+                <div class="login-error" id="loginError">账号或密码错误，请重新输入。</div>
+                <button class="login-submit" type="submit"><span>进入工作台</span><i>→</i></button>
+            </form>
+
+            <p class="login-help">首版使用本地演示账号，生产环境可替换为企业统一身份认证。</p>
+        </div>
+        <footer>© 2026 华辰控股集团 · 司库云控平台 V0.1</footer>
+    </section>
+</main>
+<script src="/js/login.js" defer></script>
+</body>
+</html>
