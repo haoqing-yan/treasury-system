@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,13 +61,39 @@ public class CashPlan {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Long getId() { return id; }
-    public LocalDate getPlanDate() { return planDate; }
-    public CashPlanType getType() { return type; }
-    public String getCategory() { return category; }
-    public BigDecimal getAmount() { return amount; }
-    public String getOrganizationName() { return organizationName; }
-    public String getDescription() { return description; }
-    public String getCreatedBy() { return createdBy; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDate getPlanDate() {
+        return planDate;
+    }
+
+    public CashPlanType getType() {
+        return type;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }

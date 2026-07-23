@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -116,18 +117,59 @@ public class BankAccount {
         this.lastSyncTime = LocalDateTime.now();
     }
 
-    public Long getId() { return id; }
-    public AccountChannel getChannel() { return channel; }
-    public String getOrganizationName() { return organizationName; }
-    public String getBankName() { return bankName; }
-    public String getBankCode() { return bankCode; }
-    public String getAccountName() { return accountName; }
-    public String getAccountNo() { return accountNo; }
-    public String getCurrency() { return currency; }
-    public BigDecimal getBalance() { return balance; }
-    public BigDecimal getAvailableBalance() { return availableBalance; }
-    public BigDecimal getLowBalanceThreshold() { return lowBalanceThreshold; }
-    public AccountType getAccountType() { return accountType; }
-    public AccountStatus getStatus() { return status; }
-    public LocalDateTime getLastSyncTime() { return lastSyncTime; }
+    public Long getId() {
+        return id;
+    }
+
+    public AccountChannel getChannel() {
+        return channel;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public String getBankCode() {
+        return bankCode;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public String getAccountNo() {
+        return accountNo;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public BigDecimal getAvailableBalance() {
+        return availableBalance;
+    }
+
+    public BigDecimal getLowBalanceThreshold() {
+        return lowBalanceThreshold;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getLastSyncTime() {
+        return lastSyncTime;
+    }
 }

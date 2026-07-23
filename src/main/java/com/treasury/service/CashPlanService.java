@@ -3,8 +3,10 @@ package com.treasury.service;
 import com.treasury.domain.CashPlan;
 import com.treasury.dto.CashPlanDtos;
 import com.treasury.repository.CashPlanRepository;
+
 import java.time.LocalDate;
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +34,7 @@ public class CashPlanService {
                 .toList();
     }
 
-    @PreAuthorize("hasAnyRole('OPERATOR','ADMIN')")
+    @PreAuthorize("hasAuthority('cash-plan:create')")
     @Transactional
     public CashPlanDtos.Response create(CashPlanDtos.CreateRequest request, String username) {
         CashPlan plan = new CashPlan(request.planDate(), request.type(), request.category(), request.amount(),

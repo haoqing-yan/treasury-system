@@ -69,7 +69,7 @@ function configureChannel() {
 
 <template>
   <section class="page-view">
-    <div class="page-intro"><div><p class="section-kicker">FUND ACCOUNT LIFECYCLE</p><h2>资金账户</h2><p>统一维护银行、支付宝与微信支付账户的台账、余额和运行状态。</p></div><button v-if="auth.isAdmin" class="button primary" @click="modalOpen = true"><Plus :size="14" />新增账户</button></div>
+    <div class="page-intro"><div><p class="section-kicker">FUND ACCOUNT LIFECYCLE</p><h2>资金账户</h2><p>统一维护银行、支付宝与微信支付账户的台账、余额和运行状态。</p></div><button v-if="auth.hasPermission('account:manage')" class="button primary" @click="modalOpen = true"><Plus :size="14" />新增账户</button></div>
     <div class="summary-strip"><div><span>账户总数</span><strong>{{ accounts.length }}</strong></div><div><span>正常运行</span><strong>{{ accounts.filter(item => item.status === 'ACTIVE').length }}</strong></div><div><span>人民币余额</span><strong>¥ {{ format.wan(cnyBalance) }}</strong></div><div><span>余额预警</span><strong>{{ accounts.filter(item => item.lowBalance).length }}</strong></div></div>
     <div class="payment-tabs channel-tabs"><button :class="{ active: channel === '' }" @click="selectChannel('')">全部 <span>{{ accounts.length }}</span></button><button :class="{ active: channel === 'BANK' }" @click="selectChannel('BANK')">银行 <span>{{ accounts.filter(item => item.channel === 'BANK').length }}</span></button><button :class="{ active: channel === 'ALIPAY' }" @click="selectChannel('ALIPAY')">支付宝 <span>{{ accounts.filter(item => item.channel === 'ALIPAY').length }}</span></button><button :class="{ active: channel === 'WECHAT' }" @click="selectChannel('WECHAT')">微信支付 <span>{{ accounts.filter(item => item.channel === 'WECHAT').length }}</span></button></div>
     <article class="panel list-panel">

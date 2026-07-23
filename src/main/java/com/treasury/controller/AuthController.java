@@ -2,7 +2,9 @@ package com.treasury.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+
 import java.util.Map;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,10 +36,18 @@ public class AuthController {
 
     @GetMapping("/me")
     public Map<String, Object> me(Authentication authentication) {
+        var authorities = authentication.getAuthorities().stream()
+                .map(authority -> authority.getAuthority())
+                .toList();
         return Map.of(
                 "username", authentication.getName(),
-                "roles", authentication.getAuthorities().stream()
-                        .map(authority -> authority.getAuthority().replace("ROLE_", ""))
+                "roles", authorities.stream()
+                        .filter(authority -> authority.startsWith("ROLE_"))
+                        .map(authority -> authority.substring("ROLE_".length()))
+                        .sorted()
+                        .toList(),
+                "permissions", authorities.stream()
+                        .filter(authority -> !authority.startsWith("ROLE_"))
                         .sorted()
                         .toList()
         );

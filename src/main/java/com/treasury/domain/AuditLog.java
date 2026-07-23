@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -51,12 +52,35 @@ public class AuditLog {
         this.operatedAt = LocalDateTime.now();
     }
 
-    public Long getId() { return id; }
-    public String getUsername() { return username; }
-    public String getAction() { return action; }
-    public String getResourceType() { return resourceType; }
-    public String getResourceId() { return resourceId; }
-    public String getDetail() { return detail; }
-    public String getIpAddress() { return ipAddress; }
-    public LocalDateTime getOperatedAt() { return operatedAt; }
+    public Long getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public String getResourceType() {
+        return resourceType;
+    }
+
+    public String getResourceId() {
+        return resourceId;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public LocalDateTime getOperatedAt() {
+        return operatedAt;
+    }
 }

@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -142,23 +143,79 @@ public class PaymentOrder {
         }
     }
 
-    public Long getId() { return id; }
-    public String getPaymentNo() { return paymentNo; }
-    public BankAccount getPayerAccount() { return payerAccount; }
-    public String getPayeeName() { return payeeName; }
-    public String getPayeeBankName() { return payeeBankName; }
-    public String getPayeeAccountNo() { return payeeAccountNo; }
-    public BigDecimal getAmount() { return amount; }
-    public String getCurrency() { return currency; }
-    public String getPurpose() { return purpose; }
-    public PaymentStatus getStatus() { return status; }
-    public String getApplicant() { return applicant; }
-    public String getApprover() { return approver; }
-    public String getRejectReason() { return rejectReason; }
-    public boolean isRiskFlag() { return riskFlag; }
-    public String getRiskMessage() { return riskMessage; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getSubmittedAt() { return submittedAt; }
-    public LocalDateTime getApprovedAt() { return approvedAt; }
-    public LocalDateTime getPaidAt() { return paidAt; }
+    public Long getId() {
+        return id;
+    }
+
+    public String getPaymentNo() {
+        return paymentNo;
+    }
+
+    public BankAccount getPayerAccount() {
+        return payerAccount;
+    }
+
+    public String getPayeeName() {
+        return payeeName;
+    }
+
+    public String getPayeeBankName() {
+        return payeeBankName;
+    }
+
+    public String getPayeeAccountNo() {
+        return payeeAccountNo;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public PaymentStatus getStatus() {
+        return status;
+    }
+
+    public String getApplicant() {
+        return applicant;
+    }
+
+    public String getApprover() {
+        return approver;
+    }
+
+    public String getRejectReason() {
+        return rejectReason;
+    }
+
+    public boolean isRiskFlag() {
+        return riskFlag;
+    }
+
+    public String getRiskMessage() {
+        return riskMessage;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getSubmittedAt() {
+        return submittedAt;
+    }
+
+    public LocalDateTime getApprovedAt() {
+        return approvedAt;
+    }
+
+    public LocalDateTime getPaidAt() {
+        return paidAt;
+    }
 }

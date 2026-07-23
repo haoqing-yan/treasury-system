@@ -48,7 +48,7 @@ const confirmText = computed(() => {
 
 onMounted(async () => {
   await load()
-  if (route.query.create === '1' && auth.canOperate) {
+  if (route.query.create === '1' && auth.hasPermission('payment:create')) {
     modalOpen.value = true
     void router.replace('/payments')
   }
@@ -71,9 +71,9 @@ function count(value: PaymentStatus | '') {
 
 function actions(payment: Payment) {
   const result: Array<{ action: 'submit' | 'approve' | 'reject' | 'execute'; label: string; danger?: boolean }> = []
-  if (payment.status === 'DRAFT' && (auth.isAdmin || (auth.canOperate && payment.applicant === auth.user?.username))) result.push({ action: 'submit', label: '提交' })
-  if (payment.status === 'PENDING' && auth.canApprove) result.push({ action: 'approve', label: '通过' }, { action: 'reject', label: '驳回', danger: true })
-  if (payment.status === 'APPROVED' && auth.isAdmin) result.push({ action: 'execute', label: payment.payerChannel === 'BANK' ? '发送银行' : `${channelNames[payment.payerChannel]}支付` })
+  if (payment.status === 'DRAFT' && auth.hasPermission('payment:submit') && (auth.isAdmin || payment.applicant === auth.user?.username)) result.push({ action: 'submit', label: '提交' })
+  if (payment.status === 'PENDING' && auth.hasPermission('payment:approve')) result.push({ action: 'approve', label: '通过' }, { action: 'reject', label: '驳回', danger: true })
+  if (payment.status === 'APPROVED' && auth.hasPermission('payment:execute')) result.push({ action: 'execute', label: payment.payerChannel === 'BANK' ? '发送银行' : `${channelNames[payment.payerChannel]}支付` })
   return result
 }
 
@@ -121,7 +121,7 @@ async function create() {
 
 <template>
   <section class="page-view">
-    <div class="page-intro"><div><p class="section-kicker">PAYMENT CONTROL</p><h2>付款管理</h2><p>统一管理银行、支付宝和微信支付渠道的付款申请、复核与执行。</p></div><button v-if="auth.canOperate" class="button primary" @click="modalOpen = true"><Plus :size="14" />新建付款</button></div>
+    <div class="page-intro"><div><p class="section-kicker">PAYMENT CONTROL</p><h2>付款管理</h2><p>统一管理银行、支付宝和微信支付渠道的付款申请、复核与执行。</p></div><button v-if="auth.hasPermission('payment:create')" class="button primary" @click="modalOpen = true"><Plus :size="14" />新建付款</button></div>
     <div class="payment-tabs"><button v-for="item in statuses" :key="item.value" :class="{ active: status === item.value }" @click="status = item.value">{{ item.label }} <span>{{ count(item.value) }}</span></button></div>
     <article class="panel list-panel">
       <div class="toolbar"><label class="search-box wide"><Search :size="15" /><input v-model="search" placeholder="搜索付款单号、收款方或用途" /></label><span class="toolbar-note"><ShieldCheck :size="13" />关键操作均写入审计日志</span></div>

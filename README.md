@@ -10,7 +10,7 @@
 - 渠道对账：银行与支付平台流水台账、付款自动匹配、手工匹配和异常流水登记。
 - 异常中心：分为业务异常和系统异常。付款风险、对账差异、账户预警归入业务异常；接口、定时任务和运行故障归入系统异常。支持认领、解决、重新打开及审计追踪。
 - 资金计划：未来资金流入流出计划及区间汇总。
-- 权限控制：用户与角色存储在 MySQL，支持资金经办、资金审批、系统管理员三类岗位。
+- 权限控制：基于 Spring Security 6 的 RBAC，用户与角色存储在 MySQL，业务接口按原子权限校验，支持资金经办、资金审批、系统管理员三类岗位。
 - 风险控制：岗位分离、状态机校验、余额校验、重复付款提示、CSRF 防护。
 - 审计追踪：记录关键业务动作、操作人、对象、时间和来源地址。
 - 演示数据：首次启动时自动生成集团账户、付款和资金计划数据。
@@ -51,6 +51,18 @@ pnpm dev
 | 资金经办 | `operator` | `operator123` | 新建付款、提交审批、维护资金计划 |
 | 资金审批 | `approver` | `approver123` | 审批或驳回付款 |
 | 系统管理员 | `admin` | `admin123` | 全部功能、银行执行、账户维护、审计日志 |
+
+### 权限模型
+
+后端以权限而不是角色名保护业务方法，前端根据登录接口返回的同一份权限清单控制菜单和按钮。当前角色映射如下：
+
+| 角色 | 权限 |
+|---|---|
+| `OPERATOR` | `payment:create`、`payment:submit`、`cash-plan:create` |
+| `APPROVER` | `payment:approve`、`reconciliation:handle`、`exception:handle` |
+| `ADMIN` | 全部权限（另含 `account:manage`、`payment:execute`、`audit:read`） |
+
+新增业务动作时，先在 `SystemPermission` 定义原子权限，再将其分配给 `SystemRole`，最后用 `@PreAuthorize("hasAuthority('...')")` 保护服务方法。
 
 ## 测试
 

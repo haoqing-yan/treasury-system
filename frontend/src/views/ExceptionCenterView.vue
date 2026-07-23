@@ -139,7 +139,7 @@ async function submitModal() {
           <td><span class="severity" :class="`severity-${item.severity}`">{{ severityNames[item.severity] }}</span></td>
           <td><StatusBadge :status="item.status" /></td>
           <td><b>{{ item.assignee ?? '尚未认领' }}</b><small v-if="item.resolution" class="resolution-note">{{ item.resolution }}</small><small v-else>{{ item.status === 'PROCESSING' ? '等待提交处理结论' : '—' }}</small></td>
-          <td><div v-if="auth.canApprove" class="row-actions"><button v-if="item.status === 'OPEN'" class="row-button primary" :disabled="processing" @click="claim(item)"><UserCheck :size="11" />认领</button><button v-else-if="item.status === 'PROCESSING' && canResolve(item)" class="row-button primary" @click="openModal(item, 'resolve')"><CheckCircle2 :size="11" />解决</button><button v-else-if="item.status === 'RESOLVED'" class="row-button" @click="openModal(item, 'reopen')"><RotateCcw :size="11" />重新打开</button><span v-else>—</span></div><span v-else>—</span></td>
+          <td><div v-if="auth.hasPermission('exception:handle')" class="row-actions"><button v-if="item.status === 'OPEN'" class="row-button primary" :disabled="processing" @click="claim(item)"><UserCheck :size="11" />认领</button><button v-else-if="item.status === 'PROCESSING' && canResolve(item)" class="row-button primary" @click="openModal(item, 'resolve')"><CheckCircle2 :size="11" />解决</button><button v-else-if="item.status === 'RESOLVED'" class="row-button" @click="openModal(item, 'reopen')"><RotateCcw :size="11" />重新打开</button><span v-else>—</span></div><span v-else>—</span></td>
         </tr>
         <tr v-if="!loading && !filtered.length"><td colspan="7"><div class="empty-state">没有符合条件的异常工单</div></td></tr>
       </tbody></table></div>

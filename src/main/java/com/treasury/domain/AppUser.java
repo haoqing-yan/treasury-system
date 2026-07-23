@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
+
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -21,7 +22,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "app_users", uniqueConstraints =
-        @UniqueConstraint(name = "uk_app_user_username", columnNames = "username"))
+@UniqueConstraint(name = "uk_app_user_username", columnNames = "username"))
 public class AppUser {
 
     @Id
@@ -68,12 +69,35 @@ public class AppUser {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Long getId() { return id; }
-    public String getUsername() { return username; }
-    public String getPasswordHash() { return passwordHash; }
-    public String getDisplayName() { return displayName; }
-    public boolean isEnabled() { return enabled; }
-    public boolean isLocked() { return locked; }
-    public Set<SystemRole> getRoles() { return Collections.unmodifiableSet(roles); }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public Long getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public Set<SystemRole> getRoles() {
+        return Collections.unmodifiableSet(roles);
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }

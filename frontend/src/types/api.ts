@@ -1,4 +1,14 @@
 export type Role = 'ADMIN' | 'OPERATOR' | 'APPROVER'
+export type Permission =
+  | 'account:manage'
+  | 'payment:create'
+  | 'payment:submit'
+  | 'payment:approve'
+  | 'payment:execute'
+  | 'reconciliation:handle'
+  | 'exception:handle'
+  | 'cash-plan:create'
+  | 'audit:read'
 export type PaymentStatus = 'DRAFT' | 'PENDING' | 'APPROVED' | 'PAID' | 'REJECTED'
 export type AccountStatus = 'ACTIVE' | 'RESTRICTED' | 'FROZEN' | 'CLOSED'
 export type AccountChannel = 'BANK' | 'ALIPAY' | 'WECHAT'
@@ -14,6 +24,7 @@ export type ExceptionStatus = 'OPEN' | 'PROCESSING' | 'RESOLVED'
 export interface CurrentUser {
   username: string
   roles: Role[]
+  permissions: Permission[]
 }
 
 export interface CsrfToken {

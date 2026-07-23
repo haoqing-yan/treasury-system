@@ -105,7 +105,7 @@ async function submitModal() {
   <section class="page-view">
     <div class="page-intro">
       <div><p class="section-kicker">CHANNEL RECONCILIATION</p><h2>渠道对账</h2><p>集中核对银行、支付宝和微信支付流水，跟踪未达账项和异常事项。</p></div>
-      <div class="quick-actions"><button class="button secondary" @click="load"><RefreshCw :size="14" />刷新流水</button><button v-if="auth.canApprove" class="button primary" :disabled="processing" @click="autoMatch"><Sparkles :size="14" />{{ processing ? '匹配中…' : '自动匹配' }}</button></div>
+      <div class="quick-actions"><button class="button secondary" @click="load"><RefreshCw :size="14" />刷新流水</button><button v-if="auth.hasPermission('reconciliation:handle')" class="button primary" :disabled="processing" @click="autoMatch"><Sparkles :size="14" />{{ processing ? '匹配中…' : '自动匹配' }}</button></div>
     </div>
 
     <div class="reconciliation-summary">
@@ -127,7 +127,7 @@ async function submitModal() {
           <td class="amount" :class="transaction.direction === 'INFLOW' ? 'positive-amount' : ''">{{ transaction.direction === 'INFLOW' ? '+' : '-' }} {{ format.symbol(transaction.currency) }} {{ format.number(transaction.amount) }}</td>
           <td>{{ transaction.purpose }}</td>
           <td><StatusBadge :status="transaction.reconciliationStatus" /><small v-if="transaction.matchedPaymentNo">付款单 {{ transaction.matchedPaymentNo }}</small><small v-else-if="transaction.matchMessage">{{ transaction.matchMessage }}</small></td>
-          <td><div class="row-actions"><template v-if="transaction.reconciliationStatus === 'UNMATCHED' && auth.canApprove"><button v-if="transaction.direction === 'OUTFLOW'" class="row-button primary" @click="openMatch(transaction)"><Link2 :size="11" />手工匹配</button><button class="row-button danger" @click="openException(transaction)"><AlertTriangle :size="11" />标记异常</button></template><span v-else>—</span></div></td>
+          <td><div class="row-actions"><template v-if="transaction.reconciliationStatus === 'UNMATCHED' && auth.hasPermission('reconciliation:handle')"><button v-if="transaction.direction === 'OUTFLOW'" class="row-button primary" @click="openMatch(transaction)"><Link2 :size="11" />手工匹配</button><button class="row-button danger" @click="openException(transaction)"><AlertTriangle :size="11" />标记异常</button></template><span v-else>—</span></div></td>
         </tr>
         <tr v-if="!loading && !filtered.length"><td colspan="8"><div class="empty-state">没有符合条件的渠道流水</div></td></tr>
       </tbody></table></div>

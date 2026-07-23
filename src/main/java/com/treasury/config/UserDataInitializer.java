@@ -3,7 +3,9 @@ package com.treasury.config;
 import com.treasury.domain.AppUser;
 import com.treasury.domain.SystemRole;
 import com.treasury.repository.AppUserRepository;
+
 import java.util.Set;
+
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;

@@ -18,7 +18,9 @@ import com.treasury.repository.BankAccountRepository;
 import com.treasury.repository.BankTransactionRepository;
 import com.treasury.repository.AppUserRepository;
 import com.treasury.repository.ExceptionCaseRepository;
+
 import java.math.BigDecimal;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -136,7 +138,10 @@ class TreasuryApplicationTests {
                         .content("{\"username\":\"admin\",\"password\":\"admin123\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("admin"))
-                .andExpect(jsonPath("$.roles").isArray());
+                .andExpect(jsonPath("$.roles").isArray())
+                .andExpect(jsonPath("$.permissions").isArray())
+                .andExpect(jsonPath("$.permissions", org.hamcrest.Matchers.hasItem("payment:execute")))
+                .andExpect(jsonPath("$.permissions", org.hamcrest.Matchers.hasItem("audit:read")));
 
         org.assertj.core.api.Assertions.assertThat(userRepository.count()).isEqualTo(3);
         org.assertj.core.api.Assertions.assertThat(userRepository.findByUsernameIgnoreCase("admin").orElseThrow()

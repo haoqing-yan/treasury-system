@@ -4,8 +4,10 @@ import com.treasury.domain.BankAccount;
 import com.treasury.domain.AccountChannel;
 import com.treasury.dto.AccountDtos;
 import com.treasury.repository.BankAccountRepository;
+
 import java.util.List;
 import java.util.Locale;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +38,7 @@ public class AccountService {
                 .toList();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('account:manage')")
     @Transactional
     public AccountDtos.Response create(AccountDtos.CreateRequest request, String username) {
         AccountChannel channel = request.channel() == null ? AccountChannel.BANK : request.channel();
@@ -59,7 +61,7 @@ public class AccountService {
         return toResponse(account);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('account:manage')")
     @Transactional
     public AccountDtos.Response update(Long id, AccountDtos.UpdateRequest request, String username) {
         BankAccount account = get(id);
@@ -70,7 +72,7 @@ public class AccountService {
         return toResponse(account);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('account:manage')")
     @Transactional
     public AccountDtos.Response sync(Long id, AccountDtos.SyncRequest request, String username) {
         if (request.availableBalance().compareTo(request.balance()) > 0) {

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { ApiError, ensureCsrf, jsonBody, request, resetCsrf } from '@/services/http'
-import type { CurrentUser, Role } from '@/types/api'
+import type { CurrentUser, Permission, Role } from '@/types/api'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<CurrentUser | null>(null)
@@ -9,11 +9,15 @@ export const useAuthStore = defineStore('auth', () => {
   const bootstrapError = ref('')
 
   const isAdmin = computed(() => hasRole('ADMIN'))
-  const canOperate = computed(() => hasRole('ADMIN') || hasRole('OPERATOR'))
-  const canApprove = computed(() => hasRole('ADMIN') || hasRole('APPROVER'))
+  const canOperate = computed(() => hasPermission('payment:create'))
+  const canApprove = computed(() => hasPermission('payment:approve'))
 
   function hasRole(role: Role) {
     return user.value?.roles.includes(role) ?? false
+  }
+
+  function hasPermission(permission: Permission) {
+    return user.value?.permissions.includes(permission) ?? false
   }
 
   async function bootstrap() {
@@ -53,5 +57,5 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { user, initialized, bootstrapError, isAdmin, canOperate, canApprove, hasRole, bootstrap, login, logout }
+  return { user, initialized, bootstrapError, isAdmin, canOperate, canApprove, hasRole, hasPermission, bootstrap, login, logout }
 })

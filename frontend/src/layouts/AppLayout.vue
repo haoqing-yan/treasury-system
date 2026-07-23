@@ -25,7 +25,7 @@ const navItems = computed(() => [
   { to: '/exceptions', label: '异常中心', icon: ShieldAlert, show: true, badge: exceptionCount.value },
   { to: '/reconciliations', label: '渠道对账', icon: ListChecks, show: true },
   { to: '/plans', label: '资金计划', icon: WalletCards, show: true },
-  { to: '/audits', label: '审计日志', icon: ScrollText, show: auth.isAdmin },
+  { to: '/audits', label: '审计日志', icon: ScrollText, show: auth.hasPermission('audit:read') },
 ])
 
 onMounted(async () => {

@@ -12,9 +12,11 @@ import com.treasury.domain.TransactionDirection;
 import com.treasury.dto.ReconciliationDtos;
 import com.treasury.repository.BankTransactionRepository;
 import com.treasury.repository.PaymentOrderRepository;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +58,7 @@ public class ReconciliationService {
         return buildSummary(transactionRepository.findAll());
     }
 
-    @PreAuthorize("hasAnyRole('APPROVER','ADMIN')")
+    @PreAuthorize("hasAuthority('reconciliation:handle')")
     @Transactional
     public ReconciliationDtos.AutoMatchResult autoMatch(String username) {
         List<BankTransaction> transactions = transactionRepository.findAllByOrderByTransactionTimeDesc();
@@ -85,7 +87,7 @@ public class ReconciliationService {
         return new ReconciliationDtos.AutoMatchResult(matched, buildSummary(transactions));
     }
 
-    @PreAuthorize("hasAnyRole('APPROVER','ADMIN')")
+    @PreAuthorize("hasAuthority('reconciliation:handle')")
     @Transactional
     public ReconciliationDtos.Response manualMatch(Long transactionId, Long paymentId, String username) {
         BankTransaction transaction = get(transactionId);
@@ -115,7 +117,7 @@ public class ReconciliationService {
         return toResponse(transaction);
     }
 
-    @PreAuthorize("hasAnyRole('APPROVER','ADMIN')")
+    @PreAuthorize("hasAuthority('reconciliation:handle')")
     @Transactional
     public ReconciliationDtos.Response markException(Long transactionId, String reason, String username) {
         BankTransaction transaction = get(transactionId);

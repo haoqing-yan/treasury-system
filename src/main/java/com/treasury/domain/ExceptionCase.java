@@ -10,11 +10,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "exception_cases", uniqueConstraints =
-        @UniqueConstraint(name = "uk_exception_case_no", columnNames = "case_no"))
+@UniqueConstraint(name = "uk_exception_case_no", columnNames = "case_no"))
 public class ExceptionCase {
 
     @Id
@@ -127,20 +128,67 @@ public class ExceptionCase {
         this.resolvedAt = null;
     }
 
-    public Long getId() { return id; }
-    public String getCaseNo() { return caseNo; }
-    public ExceptionCategory getCategory() { return category; }
-    public ExceptionCaseType getType() { return type; }
-    public ExceptionSeverity getSeverity() { return severity; }
-    public ExceptionStatus getStatus() { return status; }
-    public String getTitle() { return title; }
-    public String getDescription() { return description; }
-    public String getSourceType() { return sourceType; }
-    public String getSourceId() { return sourceId; }
-    public String getSourceReference() { return sourceReference; }
-    public String getAssignee() { return assignee; }
-    public String getResolution() { return resolution; }
-    public LocalDateTime getDetectedAt() { return detectedAt; }
-    public LocalDateTime getClaimedAt() { return claimedAt; }
-    public LocalDateTime getResolvedAt() { return resolvedAt; }
+    public Long getId() {
+        return id;
+    }
+
+    public String getCaseNo() {
+        return caseNo;
+    }
+
+    public ExceptionCategory getCategory() {
+        return category;
+    }
+
+    public ExceptionCaseType getType() {
+        return type;
+    }
+
+    public ExceptionSeverity getSeverity() {
+        return severity;
+    }
+
+    public ExceptionStatus getStatus() {
+        return status;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getSourceType() {
+        return sourceType;
+    }
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public String getSourceReference() {
+        return sourceReference;
+    }
+
+    public String getAssignee() {
+        return assignee;
+    }
+
+    public String getResolution() {
+        return resolution;
+    }
+
+    public LocalDateTime getDetectedAt() {
+        return detectedAt;
+    }
+
+    public LocalDateTime getClaimedAt() {
+        return claimedAt;
+    }
+
+    public LocalDateTime getResolvedAt() {
+        return resolvedAt;
+    }
 }

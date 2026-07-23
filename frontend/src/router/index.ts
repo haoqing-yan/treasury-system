@@ -17,7 +17,7 @@ const router = createRouter({
         { path: 'exceptions', name: 'exceptions', component: () => import('@/views/ExceptionCenterView.vue'), meta: { title: '异常中心', eyebrow: '异常工单闭环处置' } },
         { path: 'reconciliations', name: 'reconciliations', component: () => import('@/views/ReconciliationView.vue'), meta: { title: '渠道对账', eyebrow: '银行与支付平台流水匹配' } },
         { path: 'plans', name: 'plans', component: () => import('@/views/CashPlansView.vue'), meta: { title: '资金计划', eyebrow: '现金流预测' } },
-        { path: 'audits', name: 'audits', component: () => import('@/views/AuditLogsView.vue'), meta: { title: '审计日志', eyebrow: '资金操作追溯', admin: true } },
+        { path: 'audits', name: 'audits', component: () => import('@/views/AuditLogsView.vue'), meta: { title: '审计日志', eyebrow: '资金操作追溯', permission: 'audit:read' } },
       ],
     },
     { path: '/:pathMatch(.*)*', redirect: '/dashboard' },
@@ -29,7 +29,7 @@ router.beforeEach(async (to) => {
   await auth.bootstrap()
   if (to.meta.public) return auth.user ? '/dashboard' : true
   if (!auth.user) return { name: 'login', query: { redirect: to.fullPath } }
-  if (to.meta.admin && !auth.isAdmin) return '/dashboard'
+  if (to.meta.permission && !auth.hasPermission(to.meta.permission as import('@/types/api').Permission)) return '/dashboard'
   return true
 })
 

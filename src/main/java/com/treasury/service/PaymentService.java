@@ -10,11 +10,13 @@ import com.treasury.domain.PaymentStatus;
 import com.treasury.dto.PaymentDtos;
 import com.treasury.repository.BankAccountRepository;
 import com.treasury.repository.PaymentOrderRepository;
+
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +57,7 @@ public class PaymentService {
                 .toList();
     }
 
-    @PreAuthorize("hasAnyRole('OPERATOR','ADMIN')")
+    @PreAuthorize("hasAuthority('payment:create')")
     @Transactional
     public PaymentDtos.Response create(PaymentDtos.CreateRequest request, String username) {
         BankAccount payer = accountRepository.findById(request.payerAccountId())
@@ -89,7 +91,7 @@ public class PaymentService {
         return toResponse(payment);
     }
 
-    @PreAuthorize("hasAnyRole('OPERATOR','ADMIN')")
+    @PreAuthorize("hasAuthority('payment:submit')")
     @Transactional
     public PaymentDtos.Response submit(Long id, String username) {
         PaymentOrder payment = get(id);
@@ -102,7 +104,7 @@ public class PaymentService {
         return toResponse(payment);
     }
 
-    @PreAuthorize("hasAnyRole('APPROVER','ADMIN')")
+    @PreAuthorize("hasAuthority('payment:approve')")
     @Transactional
     public PaymentDtos.Response approve(Long id, String username) {
         PaymentOrder payment = get(id);
@@ -115,7 +117,7 @@ public class PaymentService {
         return toResponse(payment);
     }
 
-    @PreAuthorize("hasAnyRole('APPROVER','ADMIN')")
+    @PreAuthorize("hasAuthority('payment:approve')")
     @Transactional
     public PaymentDtos.Response reject(Long id, String reason, String username) {
         PaymentOrder payment = get(id);
@@ -128,7 +130,7 @@ public class PaymentService {
         return toResponse(payment);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('payment:execute')")
     @Transactional
     public PaymentDtos.Response execute(Long id, String username) {
         PaymentOrder payment = get(id);

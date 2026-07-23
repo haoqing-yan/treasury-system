@@ -13,12 +13,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bank_transactions", uniqueConstraints =
-        @UniqueConstraint(name = "uk_bank_transaction_no", columnNames = "transaction_no"))
+@UniqueConstraint(name = "uk_bank_transaction_no", columnNames = "transaction_no"))
 public class BankTransaction {
 
     @Id
@@ -120,21 +121,71 @@ public class BankTransaction {
         this.matchedAt = null;
     }
 
-    public Long getId() { return id; }
-    public String getTransactionNo() { return transactionNo; }
-    public BankAccount getBankAccount() { return bankAccount; }
-    public LocalDateTime getTransactionTime() { return transactionTime; }
-    public TransactionDirection getDirection() { return direction; }
-    public String getCounterpartyName() { return counterpartyName; }
-    public String getCounterpartyAccountNo() { return counterpartyAccountNo; }
-    public BigDecimal getAmount() { return amount; }
-    public String getCurrency() { return currency; }
-    public BigDecimal getBalanceAfter() { return balanceAfter; }
-    public String getPurpose() { return purpose; }
-    public ReconciliationStatus getReconciliationStatus() { return reconciliationStatus; }
-    public PaymentOrder getMatchedPayment() { return matchedPayment; }
-    public String getMatchMethod() { return matchMethod; }
-    public String getMatchMessage() { return matchMessage; }
-    public LocalDateTime getMatchedAt() { return matchedAt; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public Long getId() {
+        return id;
+    }
+
+    public String getTransactionNo() {
+        return transactionNo;
+    }
+
+    public BankAccount getBankAccount() {
+        return bankAccount;
+    }
+
+    public LocalDateTime getTransactionTime() {
+        return transactionTime;
+    }
+
+    public TransactionDirection getDirection() {
+        return direction;
+    }
+
+    public String getCounterpartyName() {
+        return counterpartyName;
+    }
+
+    public String getCounterpartyAccountNo() {
+        return counterpartyAccountNo;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public BigDecimal getBalanceAfter() {
+        return balanceAfter;
+    }
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public ReconciliationStatus getReconciliationStatus() {
+        return reconciliationStatus;
+    }
+
+    public PaymentOrder getMatchedPayment() {
+        return matchedPayment;
+    }
+
+    public String getMatchMethod() {
+        return matchMethod;
+    }
+
+    public String getMatchMessage() {
+        return matchMessage;
+    }
+
+    public LocalDateTime getMatchedAt() {
+        return matchedAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }

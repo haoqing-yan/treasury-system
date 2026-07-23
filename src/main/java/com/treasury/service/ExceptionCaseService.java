@@ -7,11 +7,13 @@ import com.treasury.domain.ExceptionSeverity;
 import com.treasury.domain.ExceptionStatus;
 import com.treasury.dto.ExceptionCaseDtos;
 import com.treasury.repository.ExceptionCaseRepository;
+
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -63,7 +65,7 @@ public class ExceptionCaseService {
         );
     }
 
-    @PreAuthorize("hasAnyRole('APPROVER','ADMIN')")
+    @PreAuthorize("hasAuthority('exception:handle')")
     @Transactional
     public ExceptionCaseDtos.Response claim(Long id, String username) {
         ExceptionCase item = get(id);
@@ -73,7 +75,7 @@ public class ExceptionCaseService {
         return toResponse(item);
     }
 
-    @PreAuthorize("hasAnyRole('APPROVER','ADMIN')")
+    @PreAuthorize("hasAuthority('exception:handle')")
     @Transactional
     public ExceptionCaseDtos.Response resolve(Long id, String note, String username) {
         ExceptionCase item = get(id);
@@ -83,7 +85,7 @@ public class ExceptionCaseService {
         return toResponse(item);
     }
 
-    @PreAuthorize("hasAnyRole('APPROVER','ADMIN')")
+    @PreAuthorize("hasAuthority('exception:handle')")
     @Transactional
     public ExceptionCaseDtos.Response reopen(Long id, String reason, String username) {
         ExceptionCase item = get(id);

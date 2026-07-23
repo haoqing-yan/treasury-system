@@ -6,6 +6,7 @@ import com.treasury.domain.ExceptionSeverity;
 import com.treasury.domain.ExceptionStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
 import java.time.LocalDateTime;
 
 public final class ExceptionCaseDtos {

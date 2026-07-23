@@ -2,7 +2,9 @@ package com.treasury.controller;
 
 import com.treasury.dto.AuditDtos;
 import com.treasury.service.AuditService;
+
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,7 @@ public class AuditController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('audit:read')")
     public List<AuditDtos.Response> recent() {
         return service.recent();
     }

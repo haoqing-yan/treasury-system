@@ -47,7 +47,7 @@ async function create() {
 
 <template>
   <section class="page-view">
-    <div class="page-intro"><div><p class="section-kicker">CASH FORECAST</p><h2>资金计划</h2><p>维护未来资金流入流出，提前识别缺口与闲置。</p></div><button v-if="auth.canOperate" class="button primary" @click="modalOpen = true"><Plus :size="14" />新增计划</button></div>
+    <div class="page-intro"><div><p class="section-kicker">CASH FORECAST</p><h2>资金计划</h2><p>维护未来资金流入流出，提前识别缺口与闲置。</p></div><button v-if="auth.hasPermission('cash-plan:create')" class="button primary" @click="modalOpen = true"><Plus :size="14" />新增计划</button></div>
     <div class="plan-overview"><article class="in"><span>计划流入</span><strong>¥ {{ format.wan(inflow) }}</strong><small>{{ plans.filter(item => item.type === 'INFLOW').length }} 笔计划</small></article><article class="out"><span>计划流出</span><strong>¥ {{ format.wan(outflow) }}</strong><small>{{ plans.filter(item => item.type === 'OUTFLOW').length }} 笔计划</small></article><article><span>计划净流量</span><strong>{{ inflow - outflow >= 0 ? '+' : '-' }} ¥ {{ format.wan(Math.abs(inflow - outflow)) }}</strong><small>{{ inflow - outflow >= 0 ? '预计资金净流入' : '需关注资金缺口' }}</small></article></div>
     <article class="panel list-panel">
       <div class="toolbar"><div class="date-range"><label>从 <input v-model="from" type="date" /></label><label>至 <input v-model="to" type="date" /></label><button class="button secondary small" @click="load">查询</button></div></div>
