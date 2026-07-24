@@ -9,6 +9,7 @@ public enum SystemPermission {
     PAYMENT_SUBMIT("payment:submit"),
     PAYMENT_APPROVE("payment:approve"),
     PAYMENT_EXECUTE("payment:execute"),
+    PAYMENT_BATCH("payment:batch"),
     RECONCILIATION_HANDLE("reconciliation:handle"),
     EXCEPTION_HANDLE("exception:handle"),
     CASH_PLAN_CREATE("cash-plan:create"),

@@ -3,6 +3,7 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { CircleAlert, Plus, Search, Send, ShieldCheck } from 'lucide-vue-next'
 import { useRoute, useRouter } from 'vue-router'
 import BaseModal from '@/components/BaseModal.vue'
+import PaymentStatusFlow from '@/components/PaymentStatusFlow.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
 import { jsonBody, request } from '@/services/http'
 import { useAuthStore } from '@/stores/auth'
@@ -27,10 +28,6 @@ const currentAction = ref<{ payment: Payment; action: 'submit' | 'approve' | 're
 const rejectReason = ref('')
 const form = reactive({ payerAccountId: 0, payeeName: '', payeeBankName: '', payeeAccountNo: '', amount: 0, purpose: '' })
 
-const statuses: Array<{ value: PaymentStatus | ''; label: string }> = [
-  { value: '', label: '全部' }, { value: 'DRAFT', label: '草稿' }, { value: 'PENDING', label: '待审批' },
-  { value: 'APPROVED', label: '待支付' }, { value: 'PAID', label: '已支付' }, { value: 'REJECTED', label: '已驳回' },
-]
 const channelNames: Record<AccountChannel, string> = { BANK: '银行', ALIPAY: '支付宝', WECHAT: '微信支付' }
 const filtered = computed(() => payments.value.filter(payment => {
   const text = `${payment.paymentNo} ${payment.payeeName} ${payment.purpose}`.toLowerCase()
@@ -63,10 +60,6 @@ async function load() {
     if (!form.payerAccountId && activeAccounts.value.length) form.payerAccountId = activeAccounts.value[0]!.id
   } catch (error) { toast.show('付款数据加载失败', error instanceof Error ? error.message : '请稍后重试', true) }
   finally { loading.value = false }
-}
-
-function count(value: PaymentStatus | '') {
-  return value ? payments.value.filter(item => item.status === value).length : payments.value.length
 }
 
 function actions(payment: Payment) {
@@ -122,7 +115,7 @@ async function create() {
 <template>
   <section class="page-view">
     <div class="page-intro"><div><p class="section-kicker">PAYMENT CONTROL</p><h2>付款管理</h2><p>统一管理银行、支付宝和微信支付渠道的付款申请、复核与执行。</p></div><button v-if="auth.hasPermission('payment:create')" class="button primary" @click="modalOpen = true"><Plus :size="14" />新建付款</button></div>
-    <div class="payment-tabs"><button v-for="item in statuses" :key="item.value" :class="{ active: status === item.value }" @click="status = item.value">{{ item.label }} <span>{{ count(item.value) }}</span></button></div>
+    <PaymentStatusFlow v-model="status" :payments="payments" />
     <article class="panel list-panel">
       <div class="toolbar"><label class="search-box wide"><Search :size="15" /><input v-model="search" placeholder="搜索付款单号、收款方或用途" /></label><span class="toolbar-note"><ShieldCheck :size="13" />关键操作均写入审计日志</span></div>
       <div class="table-wrap"><table class="data-table"><thead><tr><th>付款单 / 用途</th><th>付款账户</th><th>收款方</th><th>金额</th><th>申请人</th><th>状态</th><th class="align-right">操作</th></tr></thead><tbody>

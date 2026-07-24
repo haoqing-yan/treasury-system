@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Landmark, LayoutDashboard, ListChecks, Menu, ReceiptText, ScrollText, ShieldAlert, ShieldCheck, WalletCards, X } from 'lucide-vue-next'
+import { Landmark, LayoutDashboard, ListChecks, Menu, ReceiptText, ScrollText, Send, ShieldAlert, ShieldCheck, WalletCards, X } from 'lucide-vue-next'
 import ToastStack from '@/components/ToastStack.vue'
 import { useAuthStore } from '@/stores/auth'
 import { request } from '@/services/http'
@@ -22,6 +22,7 @@ const navItems = computed(() => [
   { to: '/dashboard', label: '资金驾驶舱', icon: LayoutDashboard, show: true },
   { to: '/accounts', label: '资金账户', icon: Landmark, show: true },
   { to: '/payments', label: '付款管理', icon: ReceiptText, show: true, badge: pendingCount.value },
+  { to: '/payment-batches', label: '批量付款', icon: Send, show: auth.hasPermission('payment:batch') },
   { to: '/exceptions', label: '异常中心', icon: ShieldAlert, show: true, badge: exceptionCount.value },
   { to: '/reconciliations', label: '渠道对账', icon: ListChecks, show: true },
   { to: '/plans', label: '资金计划', icon: WalletCards, show: true },

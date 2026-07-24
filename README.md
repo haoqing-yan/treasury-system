@@ -7,6 +7,7 @@
 - 资金驾驶舱：集团余额、可用资金、今日流出、七日净流量、银行分布、风险待办。
 - 资金账户：统一管理银行、支付宝和微信支付账户的台账、余额、状态、用途、余额预警和账号脱敏。
 - 付款管理：草稿、提交、审批、驳回、银行/支付宝/微信支付模拟执行及余额扣减。
+- 批量付款：将已审批付款统一组批并预约执行，通过有界线程池并发处理，同一付款账户自动串行，并提供批次明细和结果汇总。
 - 渠道对账：银行与支付平台流水台账、付款自动匹配、手工匹配和异常流水登记。
 - 异常中心：分为业务异常和系统异常。付款风险、对账差异、账户预警归入业务异常；接口、定时任务和运行故障归入系统异常。支持认领、解决、重新打开及审计追踪。
 - 资金计划：未来资金流入流出计划及区间汇总。
@@ -60,7 +61,7 @@ pnpm dev
 |---|---|
 | `OPERATOR` | `payment:create`、`payment:submit`、`cash-plan:create` |
 | `APPROVER` | `payment:approve`、`reconciliation:handle`、`exception:handle` |
-| `ADMIN` | 全部权限（另含 `account:manage`、`payment:execute`、`audit:read`） |
+| `ADMIN` | 全部权限（另含 `account:manage`、`payment:execute`、`payment:batch`、`audit:read`） |
 
 新增业务动作时，先在 `SystemPermission` 定义原子权限，再将其分配给 `SystemRole`，最后用 `@PreAuthorize("hasAuthority('...')")` 保护服务方法。
 
@@ -70,12 +71,12 @@ pnpm dev
 mvn test
 ```
 
-集成测试覆盖驾驶舱、付款申请、岗位复核、模拟支付、余额扣减、越权拦截和参数校验。
+集成测试覆盖驾驶舱、付款申请、岗位复核、模拟支付、批次组建、多线程批次执行、余额扣减、越权拦截和参数校验。
 
 ## 数据库
 
 - 默认数据库：MySQL 8+，库名 `treasury`，字符集 `utf8mb4`；本机 MySQL 9.3 已通过连接和业务接口验证。
-- 表结构：`bank_accounts`、`payment_orders`、`cash_plans`、`bank_transactions`、`exception_cases`、`audit_logs`、`app_users`、`app_user_roles`；资金账户使用 `channel` 区分 `BANK`、`ALIPAY`和 `WECHAT`。
+- 表结构：`bank_accounts`、`payment_orders`、`payment_batches`、`payment_batch_items`、`cash_plans`、`bank_transactions`、`exception_cases`、`audit_logs`、`app_users`、`app_user_roles`；资金账户使用 `channel` 区分 `BANK`、`ALIPAY`和 `WECHAT`。
 - 版本管理：Flyway 脚本位于 `src/main/resources/db/migration`，禁止在生产环境使用 Hibernate 自动改表。
 - H2 仅作为备用开发模式和自动化测试数据库。
 

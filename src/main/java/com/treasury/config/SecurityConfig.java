@@ -33,6 +33,7 @@ public class SecurityConfig {
                 ROLE_ADMIN > payment:submit
                 ROLE_ADMIN > payment:approve
                 ROLE_ADMIN > payment:execute
+                ROLE_ADMIN > payment:batch
                 ROLE_ADMIN > reconciliation:handle
                 ROLE_ADMIN > exception:handle
                 ROLE_ADMIN > cash-plan:create

@@ -122,9 +122,28 @@ public class PaymentOrder {
     }
 
     public void markPaid() {
-        requireStatus(PaymentStatus.APPROVED, "只有已审批付款可以发送银行");
+        if (this.status != PaymentStatus.APPROVED && this.status != PaymentStatus.PROCESSING) {
+            throw new IllegalStateException("只有已审批或执行中的付款可以发送银行");
+        }
         this.status = PaymentStatus.PAID;
         this.paidAt = LocalDateTime.now();
+    }
+
+    public void queue() {
+        requireStatus(PaymentStatus.APPROVED, "只有已审批付款可以加入批次");
+        this.status = PaymentStatus.QUEUED;
+    }
+
+    public void beginBatchExecution() {
+        requireStatus(PaymentStatus.QUEUED, "只有待批次执行的付款可以开始处理");
+        this.status = PaymentStatus.PROCESSING;
+    }
+
+    public void markBatchFailed() {
+        if (this.status != PaymentStatus.QUEUED && this.status != PaymentStatus.PROCESSING) {
+            throw new IllegalStateException("只有批次中的付款可以标记失败");
+        }
+        this.status = PaymentStatus.FAILED;
     }
 
     public void restoreForSeed(PaymentStatus status, String approver, String rejectReason,

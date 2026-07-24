@@ -14,6 +14,7 @@ const router = createRouter({
         { path: 'dashboard', name: 'dashboard', component: () => import('@/views/DashboardView.vue'), meta: { title: '资金驾驶舱', eyebrow: '资金运营总览' } },
         { path: 'accounts', name: 'accounts', component: () => import('@/views/AccountsView.vue'), meta: { title: '资金账户', eyebrow: '多渠道账户全生命周期' } },
         { path: 'payments', name: 'payments', component: () => import('@/views/PaymentsView.vue'), meta: { title: '付款管理', eyebrow: '支付流程与风险控制' } },
+        { path: 'payment-batches', name: 'payment-batches', component: () => import('@/views/PaymentBatchesView.vue'), meta: { title: '批量付款', eyebrow: '统一组批与定时执行', permission: 'payment:batch' } },
         { path: 'exceptions', name: 'exceptions', component: () => import('@/views/ExceptionCenterView.vue'), meta: { title: '异常中心', eyebrow: '异常工单闭环处置' } },
         { path: 'reconciliations', name: 'reconciliations', component: () => import('@/views/ReconciliationView.vue'), meta: { title: '渠道对账', eyebrow: '银行与支付平台流水匹配' } },
         { path: 'plans', name: 'plans', component: () => import('@/views/CashPlansView.vue'), meta: { title: '资金计划', eyebrow: '现金流预测' } },

@@ -5,11 +5,14 @@ export type Permission =
   | 'payment:submit'
   | 'payment:approve'
   | 'payment:execute'
+  | 'payment:batch'
   | 'reconciliation:handle'
   | 'exception:handle'
   | 'cash-plan:create'
   | 'audit:read'
-export type PaymentStatus = 'DRAFT' | 'PENDING' | 'APPROVED' | 'PAID' | 'REJECTED'
+export type PaymentStatus = 'DRAFT' | 'PENDING' | 'APPROVED' | 'QUEUED' | 'PROCESSING' | 'PAID' | 'FAILED' | 'REJECTED'
+export type PaymentBatchStatus = 'READY' | 'PROCESSING' | 'COMPLETED' | 'PARTIAL_FAILED' | 'FAILED'
+export type PaymentBatchItemStatus = 'READY' | 'PROCESSING' | 'SUCCESS' | 'FAILED'
 export type AccountStatus = 'ACTIVE' | 'RESTRICTED' | 'FROZEN' | 'CLOSED'
 export type AccountChannel = 'BANK' | 'ALIPAY' | 'WECHAT'
 export type AccountType = 'BASIC' | 'GENERAL' | 'SPECIAL' | 'SETTLEMENT' | 'CASH_POOL' | 'PAYMENT_PLATFORM'
@@ -75,6 +78,35 @@ export interface Payment {
   submittedAt?: string
   approvedAt?: string
   paidAt?: string
+}
+
+export interface PaymentBatchItem {
+  id: number
+  paymentId: number
+  paymentNo: string
+  payerAccountName: string
+  payeeName: string
+  amount: number
+  currency: string
+  status: PaymentBatchItemStatus
+  requestId: string
+  failureReason?: string
+}
+
+export interface PaymentBatch {
+  id: number
+  batchNo: string
+  scheduledAt: string
+  status: PaymentBatchStatus
+  totalAmount: number
+  totalCount: number
+  successCount: number
+  failedCount: number
+  createdBy: string
+  createdAt: string
+  startedAt?: string
+  completedAt?: string
+  items: PaymentBatchItem[]
 }
 
 export interface CashPlan {
